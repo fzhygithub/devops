@@ -1,0 +1,187 @@
+apiVersion: devops.alauda.io/v1alpha1
+kind: ClusterPipelineTemplate
+metadata:
+  annotations:
+    alauda.io/description.en: Update Application
+    alauda.io/description.zh-CN: 更新应用
+    alauda.io/displayName.en: Update Application
+    alauda.io/displayName.zh-CN: 更新应用
+    alauda.io/style.icon: kubernetes
+    alauda.io/version: 2.0.0
+    templateName: alaudaDeployService
+  creationTimestamp: "2019-08-06T07:33:49Z"
+  labels:
+    category: DeployService
+    source: official
+    templateName: alaudaDeployService
+  name: alaudaDeployService.2.0.0
+  resourceVersion: "3129"
+  selfLink: /apis/devops.alauda.io/v1alpha1/clusterpipelinetemplates/alaudaDeployService.2.0.0
+  uid: 8805874c-b81c-11e9-ba18-0a580ac70005
+spec:
+  agent:
+    label: tools
+    raw: ""
+  arguments:
+  - displayName:
+      en: Update Application
+      zh-CN: 更新应用
+    items:
+    - binding:
+      - deployService.args.clusterName
+      default: ""
+      display:
+        description:
+          en: cluster
+          zh-CN: 需要更新的应用所在的集群
+        name:
+          en: cluster
+          zh-CN: 集群
+        type: alauda.io/clustername
+      name: clusterName
+      required: true
+      schema:
+        type: string
+      value: ""
+    - binding:
+      - deployService.args.namespace
+      default: ""
+      display:
+        description:
+          en: namespace
+          zh-CN: 需要更新的应用所在的命名空间
+        name:
+          en: namespace
+          zh-CN: 命名空间
+        related: clusterName
+        type: alauda.io/namespace
+      name: namespace
+      required: true
+      schema:
+        type: string
+      value: ""
+    - binding:
+      - deployService.args.serviceName
+      default: ""
+      display:
+        description:
+          en: application
+          zh-CN: 需要更新的应用名称、组件类型、组件名称
+        name:
+          en: application
+          zh-CN: 应用
+        related: namespace
+        type: alauda.io/servicenamemix
+      name: serviceName
+      required: true
+      schema:
+        type: string
+      value: ""
+    - binding:
+      - deployService.args.containerName
+      default: ""
+      display:
+        description:
+          en: container
+          zh-CN: 需要更新的容器实例名称
+        name:
+          en: container
+          zh-CN: 容器
+        related: serviceName
+        type: alauda.io/containername
+      name: containerName
+      required: true
+      schema:
+        type: string
+      value: ""
+    - binding:
+      - deployService.args.imageRepositoryDeploy
+      default: ""
+      display:
+        description:
+          en: Repository
+          zh-CN: 选择或者输入镜像仓库
+        name:
+          en: Repository
+          zh-CN: 镜像仓库
+        type: alauda.io/dockerimagerepositorypullmix
+      name: imageRepositoryDeploy
+      required: true
+      schema:
+        type: alauda.io/dockerimagerepositorypullmix
+      value: ""
+    - binding:
+      - deployService.args.command
+      default: ""
+      display:
+        advanced: true
+        description:
+          en: command
+          zh-CN: 即 command，相当于 Dockerfile 中的 ENTRYPOINT 命令。如果没有指定启动命令，将使用容器镜像中的 ENTRYPOINT
+        name:
+          en: command
+          zh-CN: 启动命令
+        type: string
+      name: command
+      required: false
+      schema:
+        type: string
+      value: ""
+    - binding:
+      - deployService.args.args
+      default: ""
+      display:
+        advanced: true
+        description:
+          en: args
+          zh-CN: 即 args，相当于 Dockerfile 中的 CMD，负责提供启动命令的命令参数。如果没有指定参数，将使用容器镜像中的 CMD
+        name:
+          en: args
+          zh-CN: 参数
+        type: string
+      name: args
+      required: false
+      schema:
+        type: string
+      value: ""
+    - binding:
+      - deployService.args.timeout
+      default: "300"
+      display:
+        advanced: true
+        description:
+          en: ""
+          zh-CN: 当前任务的执行时间若超过超时时间，则会中止任务，流水线变为失败状态
+        name:
+          en: Timeout (s)
+          zh-CN: 超时时间（秒）
+        type: string
+      name: timeout
+      required: true
+      schema:
+        type: string
+      value: ""
+  engine: graph
+  options:
+    timeout: 0
+  parameters:
+  - description: Image Tag
+    name: imageTag
+    type: string
+    value: latest
+  stages:
+  - display:
+      en: DeployService
+      zh-CN: DeployService
+    name: DeployService
+    tasks:
+    - display:
+        en: deployService
+        zh-CN: deployService
+      kind: ClusterPipelineTaskTemplate
+      name: deployService.2.0.1
+      type: public/deployService
+  triggers:
+    raw: ""
+  values: {}
+  withSCM: false

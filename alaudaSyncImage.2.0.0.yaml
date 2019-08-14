@@ -1,0 +1,165 @@
+apiVersion: devops.alauda.io/v1alpha1
+kind: ClusterPipelineTemplate
+metadata:
+  annotations:
+    alauda.io/description.en: Sync image template. Synchronize a Image tag from the
+      source repository to the target repository. If the source image or target image
+      repository is a private repository (intranet address), ensure that Jenkins services
+      are available in the same network.
+    alauda.io/description.zh-CN: 同步镜像模板。将一个镜像从源仓库同步到目标仓库。若源镜像或目标镜像仓库为私有仓库（内网地址），需确保
+      Jenkins 服务与其在同一网络环境内，方可使用。
+    alauda.io/displayName.en: Sync Image
+    alauda.io/displayName.zh-CN: 同步镜像
+    alauda.io/style.icon: docker
+    alauda.io/version: 2.0.0
+    templateName: alaudaSyncImage
+  creationTimestamp: "2019-08-06T07:33:48Z"
+  labels:
+    category: SyncImage
+    source: official
+    templateName: alaudaSyncImage
+  name: alaudaSyncImage.2.0.0
+  resourceVersion: "3116"
+  selfLink: /apis/devops.alauda.io/v1alpha1/clusterpipelinetemplates/alaudaSyncImage.2.0.0
+  uid: 87df9747-b81c-11e9-ba18-0a580ac70005
+spec:
+  agent:
+    label: tools
+    raw: ""
+  arguments:
+  - displayName:
+      en: Source Image Info
+      zh-CN: 源镜像信息
+    items:
+    - binding:
+      - alaudaSyncImage.args.sourceImageRepository
+      default: ""
+      display:
+        description:
+          en: When synchronizing the images, select the source images directly if
+            the images are platform images. If the source images are third party images,
+            you must enter the third party repository address, for example, alauda/hello-world
+          zh-CN: 可选择已为项目分配的镜像仓库，也可输入镜像仓库。例：index.docker.io/alauda/hello-world
+        name:
+          en: Address of source Image repository
+          zh-CN: 源镜像仓库地址
+        type: string
+      name: sourceImageRepository
+      required: true
+      schema:
+        type: string
+      value: ""
+    - binding:
+      - alaudaSyncImage.args.sourceImageTag
+      default: ${imageTag}
+      display:
+        advanced: true
+        description:
+          en: When synchronizing the images, enter the version of the source image,
+            for example, latest.
+          zh-CN: 源镜像的版本。例：latest
+        name:
+          en: Source image tag
+          zh-CN: 源镜像标签
+        type: string
+      name: sourceImageTag
+      required: true
+      schema:
+        type: string
+      value: ""
+    - binding:
+      - alaudaSyncImage.args.sourceCredentialsId
+      default: ""
+      display:
+        description:
+          en: Source Credentials
+          zh-CN: 拉取镜像时，使用的凭据
+        name:
+          en: Source Credentials
+          zh-CN: 源镜像凭据
+        type: alauda.io/jenkinscredentials
+      name: sourceCredentialsId
+      required: false
+      schema:
+        type: string
+      value: ""
+  - displayName:
+      en: Target Image Info
+      zh-CN: 目标镜像信息
+    items:
+    - binding:
+      - alaudaSyncImage.args.targetImageRepository
+      default: ""
+      display:
+        description:
+          en: When synchronizing the images, select the target images directly if
+            the images are platform images. If the target images are third party images,
+            you must enter the third party repository address, for example, alauda/hello-world
+          zh-CN: 可选择已为项目分配的镜像仓库，也可输入镜像仓库。例：index.docker.io/alauda/hello-world
+        name:
+          en: Address of target Image repository
+          zh-CN: 目标镜像仓库地址
+        type: string
+      name: targetImageRepository
+      required: true
+      schema:
+        type: string
+      value: ""
+    - binding:
+      - alaudaSyncImage.args.targetImageTag
+      default: ${imageTag}
+      display:
+        advanced: true
+        description:
+          en: When synchronizing the images, enter the version of the target image,
+            for example, latest.
+          zh-CN: 同步镜像时，生成镜像的标签
+        name:
+          en: Target image tag
+          zh-CN: 目标镜像标签
+        type: string
+      name: targetImageTag
+      required: true
+      schema:
+        type: string
+      value: ""
+    - binding:
+      - alaudaSyncImage.args.targetCredentialsId
+      default: ""
+      display:
+        description:
+          en: Target Credentials
+          zh-CN: 推送镜像时，使用的凭据
+        name:
+          en: Target Credentials
+          zh-CN: 目标镜像凭据
+        type: alauda.io/jenkinscredentials
+      name: targetCredentialsId
+      required: false
+      schema:
+        type: string
+      value: ""
+  engine: graph
+  options:
+    timeout: 0
+  parameters:
+  - description: Image Tag
+    name: imageTag
+    type: string
+    value: latest
+  stages:
+  - display:
+      en: SyncImage
+      zh-CN: SyncImage
+    name: SyncImage
+    tasks:
+    - display:
+        en: alaudaSyncImage
+        zh-CN: alaudaSyncImage
+      kind: ClusterPipelineTaskTemplate
+      name: alaudaSyncImage.2.0.0
+      type: public/alaudaSyncImage
+  triggers:
+    raw: ""
+  values: {}
+  withSCM: false
